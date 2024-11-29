@@ -1,0 +1,47 @@
+71% penyimpanan digunakan … Jika ruang penyimpanan sudah penuh, Anda tidak akan dapat membuat, mengedit, dan mengupload file. Dapatkan penyimpanan sebesar 30 GB seharga Rp 12.200,00 Rp 3.000,00 untuk 1 bulan.
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Form Perpustakaan</title>
+</head>
+<body>
+    <h2>Form Perpustakaan</h2>
+    <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+        <label for="nama">Nama:</label><br>
+        <input type="text" id="nama" name="nama"><br>
+
+        <label for="jenis_buku">Jenis Buku:</label><br>
+        <input type="text" id="jenis_buku" name="jenis_buku"><br>
+
+        <label for="judul_buku">Judul Buku:</label><br>
+        <input type="text" id="judul_buku" name="judul_buku"><br>
+
+        <label for="tanggal_peminjaman">Tanggal Peminjaman:</label><br>
+        <input type="date" id="tanggal_peminjaman" name="tanggal_peminjaman"><br>
+
+        <label for="tanggal_pengembalian">Tanggal Pengembalian:</label><br>
+        <input type="date" id="tanggal_pengembalian" name="tanggal_pengembalian"><br>
+
+        <input type="submit" value="Hitung Denda">
+    </form>
+
+    <?php
+    // Proses perhitungan denda
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $tanggal_peminjaman = strtotime($_POST['tanggal_peminjaman']);
+        $tanggal_pengembalian = strtotime($_POST['tanggal_pengembalian']);
+
+        // Hitung selisih hari
+        $selisih_hari = ($tanggal_pengembalian - $tanggal_peminjaman) / (60 * 60 * 24);
+
+        // Hitung denda jika terlambat
+        if ($selisih_hari > 0) {
+            $denda = $selisih_hari * 1000; // Misalnya denda per hari adalah 1000
+            echo "<p>Total Denda Telat Pengembalian: " . number_format($denda, 0, ',', '.') . " Rp</p>";
+        } else {
+            echo "<p>Tidak Ada Denda</p>";
+        }
+    }
+    ?>
+</body>
+</html>
